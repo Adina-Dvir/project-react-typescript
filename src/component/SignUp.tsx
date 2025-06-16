@@ -1,19 +1,26 @@
+import { useState } from "react";
+import type { FormEvent } from "react";
 
-import React, { useState } from "react";
 import "../css/loginCss.css";
 
-const SignUp = ({ onSignupSuccess }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+// טיפוס לפרטי המשתמש שמעבירים לאבא
+interface SignUpProps {
+  onSignupSuccess: (user: {
+    userName: string;
+    profileImage: string | null;
+  }) => void;
+}
 
-  const handleSubmit = async (e) => {
+const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-console.log("111111");
+    console.log("📤 נשלח טופס הרשמה");
 
     try {
-      console.log("222222222");
-
       const response = await fetch("https://localhost:7111/api/Login", {
         method: "POST",
         headers: {
@@ -24,35 +31,34 @@ console.log("111111");
           UserEmail: email,
           UserPassword: password,
         }),
-
       });
 
       const text = await response.text();
 
       try {
-                console.log("33");
-
         const data = JSON.parse(text);
 
         if (response.ok) {
           alert("נרשמת והתחברת בהצלחה!");
 
-          // שמירת פרטי המשתמש
+          // שמירת נתונים ב־localStorage
           localStorage.setItem("token", data.user.token);
           localStorage.setItem("userName", data.user.userName);
-          if (data.user.profileImage)
+          if (data.user.profileImage) {
             localStorage.setItem("profileImage", data.user.profileImage);
+          }
 
+          // עדכון אבא
           onSignupSuccess({
             userName: data.user.userName,
             profileImage: data.user.profileImage || null,
           });
 
         } else {
-          alert(data.user.message || "שגיאה בהרשמה");
+          alert(data.user?.message || "שגיאה בהרשמה");
         }
-      } catch (e) {
-        alert("errorrrrr: ",text);
+      } catch (parseError) {
+        alert("שגיאה בפענוח תגובת השרת:\n" + text);
       }
     } catch (error) {
       alert("שגיאה בשרת או ברשת");
