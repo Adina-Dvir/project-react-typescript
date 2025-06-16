@@ -1,5 +1,6 @@
 // מייבאים כלים מ-Redux Toolkit
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import type {User,UserState} from '../../type/userType'
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 // מייבאים את הפונקציות שמבצעות את הקריאות לשרת (API)
 import {
     getUser,
@@ -10,7 +11,7 @@ import {
 } from '../../services/userApi';
 
 // מצב התחלתי של הסטייט
-const initialState = {
+const initialState:UserState = {
     users: [],       // רשימת המשתמשים
     loading: false,  // האם טוען כרגע נתונים
     error: '',       // הודעת שגיאה במקרה של תקלה
@@ -19,32 +20,32 @@ const initialState = {
 // שליפות מהשרת (API) באמצעות createAsyncThunk – כל אחת מהן מגדירה פעולה אסינכרונית שנוכל להשתמש בה ב-redux
 
 // שליפת כל המשתמשים
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+export const fetchUsers = createAsyncThunk<User[]>('users/fetchUsers', async () => {
     const response = await getUser(); // קריאה לשרת לשליפת המשתמשים
     return response;
 });
 
 // שליפת משתמש לפי מזהה
-export const fetchUserById = createAsyncThunk('users/fetchUserById', async (id) => {
+export const fetchUserById = createAsyncThunk<User,number>('users/fetchUserById', async (id) => {
     const response = await getUserById(id);
     return response;
 });
 
 // יצירת משתמש חדש
-export const createUser = createAsyncThunk('users/createUser', async (userData) => {
+export const createUser = createAsyncThunk<User,User>('users/createUser', async (userData) => {
     return await addUser(userData);
 });
 
 // מחיקת משתמש לפי מזהה
-export const removeUser = createAsyncThunk('users/removeUser', async (id) => {
+export const removeUser = createAsyncThunk<number,number>('users/removeUser', async (id) => {
     await deleteUser(id);
     return id; // מחזיר את ה-id כדי שנוכל להסיר אותו מהסטייט
 });
 
 // עדכון משתמש לפי מזהה
-export const updateUserById = createAsyncThunk('users/updateUserById', async ({ id, userData }) => {
+export const updateUserById = createAsyncThunk<User,{id:number;userData:User}>('users/updateUserById', async ({ id, userData }) => {
     const response = await updateUser(id, userData);
-    return response.data;
+    return response;
 });
 
 // יוצרים את ה-slice – זה בעצם הסטייט + הפונקציות שמשפיעות עליו
@@ -57,29 +58,26 @@ const userSlice = createSlice({
             .addCase(fetchUsers.pending, (state) => {
                 state.loading = true; // התחלת שליפה - מציין שטוען
             })
-            .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.users = action.payload; // קיבלנו נתונים – שומרים אותם
-                state.loading = false;
-            })
-            .addCase(fetchUsers.rejected, (state, action) => {
-                state.error = action.error.message; // שגיאה – שומרים את ההודעה
-                state.loading = false;
-            })
-            .addCase(removeUser.fulfilled, (state, action) => {
-                // הסרה מהסטייט של המשתמש לפי ה-id
-                state.users = state.users.filter(user => user.id !== action.payload);
-            })
-            .addCase(createUser.fulfilled, (state, action) => {
-                // מוסיפים את המשתמש החדש לסטייט
-                state.users.push(action.payload);
-            })
-            .addCase(updateUserById.fulfilled, (state, action) => {
-                // עדכון משתמש קיים
-                const index = state.users.findIndex(user => user.id === action.payload.id);
-                if (index !== -1) {
-                    state.users[index] = action.payload; // מחליפים את הקיים בחדש
-                }
-            });
+                 .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
+        state.users = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.error = action.error.message || 'Something went wrong';
+        state.loading = false;
+      })
+      .addCase(removeUser.fulfilled, (state, action: PayloadAction<number>) => {
+        state.users = state.users.filter(user => user.userId !== action.payload);
+      })
+      .addCase(createUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.users.push(action.payload);
+      })
+      .addCase(updateUserById.fulfilled, (state, action: PayloadAction<User>) => {
+        const index = state.users.findIndex(user => user.userId === action.payload.userId);
+        if (index !== -1) {
+          state.users[index] = action.payload;
+        }
+      });
     }
 });
 
