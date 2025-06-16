@@ -1,11 +1,5 @@
 import axios from 'axios';
-// 🧾 תבנית שמייצגת את UserDto מהשרת (C#)
-export interface User {
-  userId: number;
-  userName: string;
-  userEmail: string;
-  userPassword: string;
-}
+import type { User } from '../type/userType';
 // 📥 מביא את כל המשתמשים
 export const getUser = async (): Promise<User[]> => {
   try {

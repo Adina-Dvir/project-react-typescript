@@ -1,14 +1,8 @@
 // 📦 ייבוא axios לשליחת בקשות HTTP
 import axios from 'axios';
 
-// 🧾 ממשק TypeScript המייצג את CommentDto מהשרת (C#)
-export interface Comment {
-  commentId: number;           // מזהה התגובה
-  commentDate: string;         // תאריך יצירת התגובה (בפורמט ISO)
-  userName: string;            // שם המשתמש
-  rating: number;              // דירוג
-  commentContent: string;      // תוכן התגובה
-}
+// 📦 ייבוא סוגים
+import type { Comment } from '../type/commentType';
 
 // 📥 מביא את כל התגובות
 export const getComment = async (): Promise<Comment[]> => {
@@ -34,7 +28,7 @@ export const getCommentById = async (id: number): Promise<Comment> => {
 };
 
 // ➕ מוסיף תגובה חדשה
-export const addComment = async (commentData: Omit<Comment, 'commentId'>): Promise<Comment> => {
+export const addComment = async (commentData: Partial<Omit<Comment, 'commentId'>>): Promise<Comment> => {
   try {
     const response = await axios.post<Comment>(
       'https://localhost:7111/api/commentController/addComment',
@@ -58,7 +52,7 @@ export const deleteComment = async (id: number): Promise<void> => {
 };
 
 // ✏️ מעדכן תגובה לפי מזהה
-export const updateComment = async (id: number, commentData: Comment): Promise<Comment> => {
+export const updateComment = async (id: number, commentData: Partial<Comment>): Promise<Comment> => {
   try {
     const response = await axios.put<Comment>(
       `https://localhost:7111/api/commentController/updateComment/${id}`,

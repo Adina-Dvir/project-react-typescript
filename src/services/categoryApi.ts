@@ -1,13 +1,13 @@
 // 📦 ייבוא ספריית axios לשליחת בקשות HTTP
 import axios from 'axios';
-
+import type{Category} from '../type/categoryType'; // מייבאים את הטיפוס של קטגוריה
 // 🧾 הגדרת ממשק טיפוסים לקטגוריה
-export interface Category {
-  id: number;
-  name: string;
-  categoryDescription: string;      // מייצג את CategoryDescription
+// export interface Category {
+//   id: number;
+//   name: string;
+//   categoryDescription: string;      // מייצג את CategoryDescription
 
-}
+// }
 
 // 📥 מביא את כל הקטגוריות מהשרת
 export const getCategory = async (): Promise<Category[]> => {

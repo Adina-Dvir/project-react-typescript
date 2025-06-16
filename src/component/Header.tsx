@@ -1,10 +1,10 @@
-
+import  type{HeaderProps} from '../type/propType'
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; // בשביל קישורים פנימיים
 //import Categories from "./Category";
 import "../css/header.css";
 
-export default function Header({ user, onLogout, onLoginClick, onSignupClick }) {
+export default function Header({ user, onLogout, onLoginClick, onSignupClick }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
 
@@ -32,7 +32,7 @@ export default function Header({ user, onLogout, onLoginClick, onSignupClick }) 
             <div
               className="user-initial-circle"
               onClick={toggleMenu}
-              title={userName}
+              title={userName?? undefined}
             >
               {userName?.charAt(0).toUpperCase()}
             </div>

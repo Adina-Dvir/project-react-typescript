@@ -19,29 +19,29 @@ const initialState:CategoryState={//הוספתי שיהיה מסוג CategorySta
 // שליפות מהשרת (API) באמצעות createAsyncThunk – כל אחת מהן מגדירה פעולה אסינכרונית שנוכל להשתמש בה ב-redux
 
 //שליפת כל הקטגוריות
-export const fetchCategories= createAsyncThunk('categories/fetchCategories',async()=>{
+export const fetchCategories= createAsyncThunk<Category[]>('categories/fetchCategories',async()=>{
     const response=await getCategory(); // קורא לפונקציה שמביאה את הקטגוריות מהשרת
     return response;
 })
 
 // שליפת קטגוריה לפי מזהה
-export const fetchCategoryById = createAsyncThunk('categories/fetchCategoryById', async (id) => {
+export const fetchCategoryById = createAsyncThunk<Category,number>('categories/fetchCategoryById', async (id:number) => {
     const response = await getCategoryById(id);
     return response;
   });
 // יצירת קטגוריה חדשה
-export const createCategory = createAsyncThunk('categories/createCategory', async (categoryData) => {
+export const createCategory = createAsyncThunk<Category,Omit<Category,'id'>>('categories/createCategory', async (categoryData) => {
     return await addCategory(categoryData);
   });
   // מחיקת קטגוריה לפי מזהה
-export const removeCategory = createAsyncThunk('categories/removeCategory', async (id) => {
+export const removeCategory = createAsyncThunk<number,number>('categories/removeCategory', async (id:number) => {
     await deleteCategory(id);
     return id; // מחזיר את ה-id כדי שנוכל להסיר אותו מהסטייט
   });
   //עדכון קטגוריה לפי מזהה
-  export const updateCategoryById = createAsyncThunk('categories/updateCategoryById', async ({ id, categoryData }) => {
-    const response = await updateCategory(id, categoryData);
-    return response.data;
+  export const updateCategoryById = createAsyncThunk<Category,{id:number,categoryData:Omit<Category,'id'>}>('categories/updateCategoryById', async ({ id, categoryData }) => {
+    const updatedCategory = await updateCategory(id, categoryData);
+    return updatedCategory;
   });
   // יוצרים את ה-slice – זה בעצם הסטייט + הפונקציות שמשפיעות עליו
 const categorySlice= createSlice({
@@ -49,29 +49,29 @@ const categorySlice= createSlice({
     initialState,         // הסטייט ההתחלתי
     reducers:{} ,     // כרגע אין reducers רגילים
     extraReducers:(builder)=>{// כאן מוסיפים תגובות לפעולות האסינכרוניות שיצרנו למעלה
-        builder.addCase(fetchCategories.pending,(state)=>{
+        builder.addCase(fetchCategories.pending,(state:CategoryState)=>{
             state.loading=true; // התחלת שליפה - מציין שטוען
         })
-        .addCase(fetchCategories.fulfilled, (state, action) => {
+        .addCase(fetchCategories.fulfilled, (state:CategoryState, action) => {
         state.categories = action.payload; // קיבלנו נתונים – שומרים אותם
         state.loading = false;
         })
-        .addCase(fetchCategories.rejected, (state, action) => {
-            state.error = action.error.message; // שגיאה – שומרים את ההודעה
+        .addCase(fetchCategories.rejected, (state:CategoryState, action) => {
+            state.error = action.error.message ?? ''; // שגיאה – שומרים את ההודעה
             state.loading = false;
         })
 
-        .addCase(removeCategory.fulfilled, (state, action) => {
+        .addCase(removeCategory.fulfilled, (state:CategoryState, action) => {
         // הסרה מהסטייט של הקטגוריה לפי ה-id
-        state.categories = state.categories.filter(category => category.id !== action.payload);
+        state.categories = state.categories.filter(category => category.categoryId!== action.payload);
         })
-        .addCase(createCategory.fulfilled, (state, action) => {
+        .addCase(createCategory.fulfilled, (state:CategoryState, action) => {
         // מוסיפים את הקטגוריה החדשה לסטייט
         state.categories.push(action.payload);
         })
-        .addCase(updateCategoryById.fulfilled, (state, action) => {
+        .addCase(updateCategoryById.fulfilled, (state:CategoryState, action) => {
         // עדכון קטגוריה קיימת
-        const index = state.categories.findIndex(category => category.id === action.payload.id);
+        const index = state.categories.findIndex(category => category.categoryId === action.payload.categoryId);
         if (index !== -1) {
           state.categories[index] = action.payload; // מחליפים את הקיים בחדש
         }

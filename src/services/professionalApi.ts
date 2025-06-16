@@ -1,24 +1,6 @@
 import axios from 'axios';
 // 🧾 תבנית שמייצגת את ProfessionalsDto מהשרת (C#)
-export interface Professional {
-  professionalId: number;
-  professionalName?: string;
-  professionalAdress?: string;
-  professionalDescription?: string;
-  priceRange?: string;
-  professionalPhone?: string;
-  professionalEmail?: string;
-  subject?: string;
-  years?: number;
-  professionalPassword?: string;
-  uploadDate?: string; // DateTime מ־C# לרוב מתקבל כמחרוזת
-  arrImage?: Uint8Array; // byte[] → Uint8Array או string (תלוי אם זה base64)
-  professionalPlace?: string;
-  profile?: string;
-  city?: string;
-  categoryId?: number;
-  fileImage?: File; // IFormFile → File ב-TypeScript
-}
+import type{Professional,ProfessionalState}from '../type/professionalType'; // מייבאים את הטיפוס של איש מקצוע
 // 📥 מביא את כל אנשי המקצוע
 export const getProfessional = async (): Promise<Professional[]> => {
   try {
@@ -44,7 +26,7 @@ export const getProfessionalById = async (id: number): Promise<Professional> => 
 
 // ➕ מוסיף איש מקצוע חדש (ללא professionalId)
 export const addProfessional = async (
-  professionalData: Omit<Professional, 'professionalId'>
+  professionalData: Partial< Omit<Professional, 'professionalId'>>
 ): Promise<Professional> => {
   try {
     const formData = new FormData();
@@ -72,7 +54,7 @@ export const addProfessional = async (
 // ✏️ מעדכן איש מקצוע קיים
 export const updateProfessional = async (
   id: number,
-  professionalData: Professional
+  professionalData: Partial<Omit<Professional, 'professionalId'>>
 ): Promise<Professional> => {
   try {
     const response = await axios.put<Professional>(

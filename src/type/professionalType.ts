@@ -16,3 +16,8 @@ export interface Professional {
   city: string;
   categoryId: number;
 }
+export interface ProfessionalState {
+  professionals: Professional[];
+  loading: boolean;
+  error: string;
+}

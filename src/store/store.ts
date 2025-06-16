@@ -3,7 +3,7 @@ import categoryReducer from '../features/Category/categorySlice';
 import professionalReducer from '../features/Professional/professionalSlice'
 import userReducer from '../features/User/userSlice'
 //import chatReducer from '../features/Chat/chatSlice'
-import commentReducer from '../features/Comment/commentSlice'
+import commentReducer from '../features/Comment/commentSlice';
 
 const store = configureStore({
     reducer: {

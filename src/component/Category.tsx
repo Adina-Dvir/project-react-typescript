@@ -1,15 +1,15 @@
 // components/Categories.js
-
 import React, { useEffect, useState } from "react";
-import { getCategory } from "../services/categoryApi.js"; // שירות שמביא את הקטגוריות מהשרת
-import "../css/category.css"; // קובץ עיצוב ייעודי
+import { getCategory } from "../services/categoryApi"; // שירות שמביא את הקטגוריות מהשרת
+import '../css/category.css'; // קובץ עיצוב ייעודי
+import type {Category} from '../type/categoryType.js'
 
 export default function Categories() {
   // יצירת state לאחסון הקטגוריות שהתקבלו מהשרת
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // state עבור שגיאה אפשרית אם הבקשה לשרת נכשלת
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
 
   // useEffect פועל ברגע שהקומפוננטה נטענת בפעם הראשונה
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function Categories() {
   return (
     <div className="categories-wrapper">
       {categories.map((category) => (
-        <div key={category.id} className="category-card">
+        <div key={category.categoryId} className="category-card">
           <div className="category-header">
             {/* לוגו של האתר או סמל */}
             <img
@@ -47,10 +47,10 @@ export default function Categories() {
           </div>
 
           {/* שם הקטגוריה */}
-          <h3 className="category-title">{category.name}</h3>
+          <h3 className="category-title">{category.categoryName}</h3>
 
           {/* תיאור קצר */}
-          <p className="category-description">{category.description}</p>
+          <p className="category-description">{category.categoryDescription}</p>
 
           {/* כפתורים */}
           <div className="category-buttons">

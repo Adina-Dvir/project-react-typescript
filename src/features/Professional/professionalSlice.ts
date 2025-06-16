@@ -1,3 +1,4 @@
+import type { Professional, ProfessionalState } from '../../type/professionalType'; // מייבאים את הטיפוס Professional
 // מייבאים כלים מ-Redux Toolkit
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -11,7 +12,7 @@ import {
 } from '../../services/professionalApi';
 
 // מצב התחלתי של הסטייט
-const initialState = {
+const initialState:ProfessionalState= {
     professionals: [],  // רשימת העסקים
     loading: false,     // האם טוען כרגע נתונים
     error: '',          // הודעת שגיאה במקרה של תקלה
@@ -20,32 +21,32 @@ const initialState = {
 // שליפות מהשרת (API) באמצעות createAsyncThunk – כל אחת מהן מגדירה פעולה אסינכרונית שנוכל להשתמש בה ב-redux
 
 // שליפת כל העסקים
-export const fetchProfessionals = createAsyncThunk('professionals/fetchProfessionals', async () => {
+export const fetchProfessionals = createAsyncThunk<Professional[]>('professionals/fetchProfessionals', async () => {
     const response = await getProfessional(); // קריאה לשרת לשליפת העסקים
     return response;
 });
 
 // שליפת עסק לפי מזהה
-export const fetchProfessionalById = createAsyncThunk('professionals/fetchProfessionalById', async (id) => {
+export const fetchProfessionalById = createAsyncThunk<Professional,number>('professionals/fetchProfessionalById', async (id:number) => {
     const response = await getProfessionalById(id);
     return response;
 });
 
 // יצירת עסק חדש
-export const createProfessional = createAsyncThunk('professionals/createProfessional', async (professionalData) => {
+export const createProfessional = createAsyncThunk<Professional,Partial<Omit<Professional,'professionalId'>>>('professionals/createProfessional', async (professionalData) => {
     return await addProfessional(professionalData);
 });
 
 // מחיקת עסק לפי מזהה
-export const removeProfessional = createAsyncThunk('professionals/removeProfessional', async (id) => {
+export const removeProfessional = createAsyncThunk('professionals/removeProfessional', async (id:number) => {
     await deleteProfessional(id);
     return id; // מחזיר את ה-id כדי שנוכל להסיר אותו מהסטייט
 });
 
 // עדכון עסק לפי מזהה
-export const updateProfessionalById = createAsyncThunk('professionals/updateProfessionalById', async ({ id, professionalData }) => {
-    const response = await updateProfessional(id, professionalData);
-    return response.data;
+export const updateProfessionalById = createAsyncThunk<Professional, { id: number; professionalData: Partial<Omit< Professional,'professionalId'>> }>('professionals/updateProfessionalById', async ({ id, professionalData }) => {
+    const updatedProfessional = await updateProfessional(id, professionalData);
+    return updatedProfessional;
 });
 
 // יוצרים את ה-slice – זה בעצם הסטייט + הפונקציות שמשפיעות עליו
@@ -55,20 +56,20 @@ const professionalSlice = createSlice({
     reducers: {},              // כרגע אין reducers רגילים
     extraReducers: (builder) => {
         builder
-            .addCase(fetchProfessionals.pending, (state) => {
+            .addCase(fetchProfessionals.pending, (state:ProfessionalState) => {
                 state.loading = true; // התחלת שליפה - מציין שטוען
             })
-            .addCase(fetchProfessionals.fulfilled, (state, action) => {
+            .addCase(fetchProfessionals.fulfilled, (state:ProfessionalState, action) => {
                 state.professionals = action.payload; // קיבלנו נתונים – שומרים אותם
                 state.loading = false;
             })
-            .addCase(fetchProfessionals.rejected, (state, action) => {
-                state.error = action.error.message; // שגיאה – שומרים את ההודעה
+            .addCase(fetchProfessionals.rejected, (state:ProfessionalState, action) => {
+                state.error = action.error.message ?? ''; // שגיאה – שומרים את ההודעה
                 state.loading = false;
             })
-            .addCase(removeProfessional.fulfilled, (state, action) => {
+            .addCase(removeProfessional.fulfilled, (state:ProfessionalState, action) => {
                 // הסרה מהסטייט של העסק לפי ה-id
-                state.professionals = state.professionals.filter(p => p.id !== action.payload);
+                state.professionals = state.professionals.filter((p:Professional) => p.professionalId !== action.payload);
             })
             .addCase(createProfessional.fulfilled, (state, action) => {
                 // מוסיפים את העסק החדש לסטייט
@@ -76,7 +77,7 @@ const professionalSlice = createSlice({
             })
             .addCase(updateProfessionalById.fulfilled, (state, action) => {
                 // עדכון עסק קיים
-                const index = state.professionals.findIndex(p => p.id === action.payload.id);
+                const index = state.professionals.findIndex((p:Professional) => p.professionalId === action.payload.professionalId);
                 if (index !== -1) {
                     state.professionals[index] = action.payload; // מחליפים את הקיים בחדש
                 }
