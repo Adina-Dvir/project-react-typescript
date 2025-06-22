@@ -6,7 +6,8 @@ import HomePage from './component/HomePage';
 import Category from './component/Category';
 import Login from './component/Login';
 import SignUp from './component/SignUp';
-import Professionals from './component/Professionals.jsx';
+import AddProfessional from './component/AddProfessional';
+import Professionals from './component/Professionals';
 // function App() {
 //   return <h1>שלום עולם!</h1>
 // }
@@ -61,6 +62,11 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route
+           path="/AddProfessional"
+           element={user ? <AddProfessional /> : <Navigate to="/" replace />}
+           
+        />
 
         <Route
           path="/Category"

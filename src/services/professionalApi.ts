@@ -25,31 +25,15 @@ export const getProfessionalById = async (id: number): Promise<Professional> => 
 };
 
 // ➕ מוסיף איש מקצוע חדש (ללא professionalId)
-export const addProfessional = async (
-  professionalData: Partial< Omit<Professional, 'professionalId'>>
-): Promise<Professional> => {
-  try {
-    const formData = new FormData();
-    for (const key in professionalData) {
-      const value = professionalData[key as keyof typeof professionalData];
-      if (value !== undefined && value !== null) {
-        formData.append(key, value as any);
-      }
+export const addProfessional = async (formData: FormData): Promise<void> => {
+  await axios.post('https://localhost:7111/api/Professional', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${localStorage.getItem('token')}`
     }
-
-    const response = await axios.post<Professional>(
-      'https://localhost:7111/api/Professional',
-      formData,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error adding professional:", error);
-    throw error;
-  }
+  });
 };
+
 
 // ✏️ מעדכן איש מקצוע קיים
 export const updateProfessional = async (

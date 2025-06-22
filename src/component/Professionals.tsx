@@ -17,12 +17,16 @@ export default function Professionals() {
   // מביאים את הנתונים מתוך ה-Redux store
   const { professionals, loading, error } = useSelector((state:RootState) => state.professionals);
 
+
   // כאשר הקומפוננטה עולה - קוראים ל-API דרך Redux thunk
   useEffect(() => {
+      console.log("📣 useEffect ran – dispatching fetchProfessionals");
+
     dispatch(fetchProfessionals());
   }, [dispatch]);
 
   console.log("Professionals from Redux:", professionals);
+console.log("📋 All professionals:", professionals);
 
   // מציג הודעת טעינה אם עדיין טוען
   if (loading) return <p>Loading...</p>;

@@ -7,7 +7,6 @@ import "../css/header.css";
 export default function Header({ user, onLogout, onLoginClick, onSignupClick }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
-
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const userName = localStorage.getItem("userName");
@@ -24,7 +23,7 @@ export default function Header({ user, onLogout, onLoginClick, onSignupClick }: 
             <Link to="/Category">CATEGORIES</Link>
             <Link to="/professionals">ALL PROFESSIONALS</Link>
             <Link to="/comments">COMMENTS SITE</Link>
-            <Link to="/enter">ENTER PROFESSIONAL</Link>
+            <Link to="/AddProfessional">ENTER PROFESSIONAL</Link>
           </nav>
 
           {/* 🔒 אזור משתמש מחובר */}

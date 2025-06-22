@@ -21,3 +21,19 @@ export interface ProfessionalState {
   loading: boolean;
   error: string;
 }
+// src/type/AddProfessionalForm.ts
+
+export interface AddProfessionalForm {
+  professionalName: string;
+  professionalPhone: string;
+  professionalEmail?: string;
+  professionalAdress?: string;
+  subject?: string;
+  professionalDescription?: string;
+  professionalPlace?: string;
+  priceRange?: string;
+  professionalPassword?: string;
+  uploadDate?: string | Date;
+  imageUrls?: string;
+  fileImage: File; // חובה אם את דורשת תמונה
+}

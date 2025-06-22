@@ -1,0 +1,54 @@
+/* addProfessional.css */
+
+.add-form {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 32px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-form h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #2c2c54;
+}
+
+.add-form input[type="text"],
+.add-form input[type="email"],
+.add-form input[type="number"],
+.add-form input[type="file"],
+.add-form input:not([type="submit"]),
+.add-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-size: 16px;
+}
+
+.add-form input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+  outline: none;
+}
+
+.add-form button[type="submit"] {
+  width: 100%;
+  background-color: #4a90e2;
+  color: white;
+  padding: 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-form button[type="submit"]:hover {
+  background-color: #357ABD;
+}
