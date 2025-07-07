@@ -1,0 +1,80 @@
+.comments-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.comments-form textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px #1c0f42;
+  font-size: 1.1rem;
+  direction: rtl;
+}
+
+.comments-form button {
+  background-color: #1c0f42;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.comment-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px #1c0f42;
+  text-align: right;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  background-color: #b0b0b0;
+  color: white;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+.rating-stars {
+  font-size: 1.5rem;
+  color: gold;
+  margin-bottom: 0.5rem;
+}
+
+.comment-meta {
+  font-weight: bold;
+}
+
+.comment-text {
+  margin-top: 0.5rem;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.5rem;
+}

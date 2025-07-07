@@ -3,7 +3,7 @@ import type { Professional } from './professionalType';
 export interface Category {
   categoryId: number;
   categoryName: string;
-  categoryDescription: string;
+  categoryDescription?: string;
   professionals: Professional[]; // מערך של מקצוענים
 }
 

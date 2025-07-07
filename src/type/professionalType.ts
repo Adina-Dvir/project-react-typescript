@@ -14,7 +14,11 @@ export interface Professional {
   professionalPlace: string;
   profile: string;
   city: string;
+  //arrImage?: string;             // אופציונלי (יכול להיות undefined)
+  fileImage?: File;              // אופציונלי (יכול להיות undefined)
   categoryId: number;
+  images: ProfessionalImage[];
+
 }
 export interface ProfessionalState {
   professionals: Professional[];
@@ -33,7 +37,14 @@ export interface AddProfessionalForm {
   professionalPlace?: string;
   priceRange?: string;
   professionalPassword?: string;
+  categoryId?: number;
   uploadDate?: string | Date;
   imageUrls?: string;
   fileImage: File; // חובה אם את דורשת תמונה
+  images: ProfessionalImage[]; // לא arrImage
+
+}
+export interface ProfessionalImage {
+    fileName: string;
+  ImageData: string;
 }

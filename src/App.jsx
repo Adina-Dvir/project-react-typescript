@@ -8,6 +8,9 @@ import Login from './component/Login';
 import SignUp from './component/SignUp';
 import AddProfessional from './component/AddProfessional';
 import Professionals from './component/Professionals';
+import ProfessionalPage from "./component/ProfessionalPage";
+import CommentsSite from './component/CommentSite';
+
 // function App() {
 //   return <h1>שלום עולם!</h1>
 // }
@@ -60,29 +63,17 @@ function App() {
         onSignupClick={() => { setMode("signup"); setModalOpen(true); }}
       />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-           path="/AddProfessional"
-           element={user ? <AddProfessional /> : <Navigate to="/" replace />}
-           
-        />
+<Routes>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/AddProfessional" element={user ? <AddProfessional /> : <Navigate to="/" replace />} />
+  <Route path="/Category" element={user ? <Category /> : <Navigate to="/" replace />} />
+  <Route path="/comments" element={user ? <CommentsSite /> : <Navigate to="/" replace />} />
 
-        <Route
-          path="/Category"
-          element={
-            user ? <Category /> : <Navigate to="/" replace />
-          }
-        />
+  <Route path="/professionals" element={user ? <Professionals /> : <Navigate to="/" replace />} />
+  <Route path="/professional/:id" element={user ?<ProfessionalPage />: <Navigate to="/" replace/> } />
+</Routes>
 
-        <Route
-          path="/professionals"
-          element={
-            user ? <Professionals /> : <Navigate to="/" replace />
-          }
-        />
-      </Routes>
-
+  
       {modalOpen && (
         <div className="modal-overlay" onClick={() => setModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -117,3 +108,5 @@ function App() {
 }
 
 export default App;
+
+

@@ -1,0 +1,41 @@
+
+.page-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* רקע דומה לתמונה */
+  min-height: 100vh;
+}
+
+.left-panel {
+  width: 400px;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.right-panel {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.15);
+  width: 480px;
+  line-height: 1.8;
+}
+
+.right-panel h2 {
+  margin-bottom: 16px;
+  font-size: 28px;
+  color: #333;
+}
+
+.right-panel strong {
+  color: #6a1b9a;
+}

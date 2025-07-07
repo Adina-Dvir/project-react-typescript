@@ -1,10 +1,29 @@
 import axios from 'axios';
-// 🧾 תבנית שמייצגת את ProfessionalsDto מהשרת (C#)
-import type{Professional,ProfessionalState}from '../type/professionalType'; // מייבאים את הטיפוס של איש מקצוע
+import type { Professional, ProfessionalState } from '../type/professionalType';
+
+const baseUrl = 'https://localhost:7111/api/Professional';
+// ➕ מוסיף קליק לעסק לפי מזהה
+export const addClickForProfessional = async (professionalId: number): Promise<void> => {
+  try {
+    await axios.post(
+      'https://localhost:7111/api/Trending',
+      { professionalId },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error adding click:", error);
+    throw error;
+  }
+};
+
 // 📥 מביא את כל אנשי המקצוע
 export const getProfessional = async (): Promise<Professional[]> => {
   try {
-    const response = await axios.get<Professional[]>('https://localhost:7111/api/Professional');
+    const response = await axios.get<Professional[]>(baseUrl);
     console.log("Fetched professionals:", response.data);
     return response.data;
   } catch (error) {
@@ -16,7 +35,7 @@ export const getProfessional = async (): Promise<Professional[]> => {
 // 📥 מביא איש מקצוע לפי מזהה
 export const getProfessionalById = async (id: number): Promise<Professional> => {
   try {
-    const response = await axios.get<Professional>(`https://localhost:7111/api/Professional/${id}`);
+    const response = await axios.get<Professional>(`${baseUrl}/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching professional with id ${id}:`, error);
@@ -24,16 +43,31 @@ export const getProfessionalById = async (id: number): Promise<Professional> => 
   }
 };
 
+// 🔥 מביא את חמשת אנשי המקצוע הכי טרנדיים
+export const getTrendingProfessionals = async (): Promise<Professional[]> => {
+  try {
+    const response = await axios.get<Professional[]>('https://localhost:7111/api/Trending/top5');
+    console.log("Fetched trending professionals:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching trending professionals:", error);
+    throw error;
+  }
+};
+
+
 // ➕ מוסיף איש מקצוע חדש (ללא professionalId)
 export const addProfessional = async (formData: FormData): Promise<void> => {
-  await axios.post('https://localhost:7111/api/Professional', formData, {
+  const token = localStorage.getItem('token');
+  console.log("טוקן שנשלח:", token);
+
+  await axios.post(baseUrl, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${token}`
     }
   });
 };
-
 
 // ✏️ מעדכן איש מקצוע קיים
 export const updateProfessional = async (
@@ -42,7 +76,7 @@ export const updateProfessional = async (
 ): Promise<Professional> => {
   try {
     const response = await axios.put<Professional>(
-      `https://localhost:7111/api/Professional/${id}`,
+      `${baseUrl}/${id}`,
       professionalData
     );
     return response.data;
@@ -55,9 +89,11 @@ export const updateProfessional = async (
 // ❌ מוחק איש מקצוע לפי מזהה
 export const deleteProfessional = async (id: number): Promise<void> => {
   try {
-    await axios.delete(`https://localhost:7111/api/Professional/${id}`);
+    await axios.delete(`${baseUrl}/${id}`);
   } catch (error) {
     console.error(`Error deleting professional with id ${id}:`, error);
     throw error;
   }
+  
 };
+

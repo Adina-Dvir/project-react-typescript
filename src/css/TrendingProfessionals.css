@@ -1,0 +1,51 @@
+.trending-container {
+  padding: 2rem;
+  background-color: #e8edff; /* רקע תכלת בהיר */
+  direction: rtl;
+}
+
+.trending-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #1e3a8a; /* כחול כהה */
+  margin-bottom: 2rem;
+}
+
+.trending-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* בדיוק 5 בעמוד */
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.trending-item {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  width: 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  text-decoration: none;
+  color: #1e3a8a;
+  transition: transform 0.2s ease;
+}
+
+.trending-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.trending-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  margin-bottom: 0.8rem;
+}
+
+.trending-item p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}

@@ -36,7 +36,7 @@ export const getCategoryById = async (id: number): Promise<Category> => {
 };
 
 // ➕ מוסיף קטגוריה חדשה (ללא id כי הוא נוצר אוטומטית בשרת)
-export const addCategory = async (categoryData: Omit<Category, 'id'>): Promise<Category> => {
+export const addCategory = async (categoryData: Omit<Category, 'categoryId'>): Promise<Category> => {
   try {
     console.log(categoryData);
     const response = await axios.post<Category>('http://localhost:7111/api/Category', categoryData);

@@ -1,5 +1,5 @@
 // components/Categories.js
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { getCategory } from "../services/categoryApi"; // שירות שמביא את הקטגוריות מהשרת
 import '../css/category.css'; // קובץ עיצוב ייעודי
 import type {Category} from '../type/categoryType.js'
