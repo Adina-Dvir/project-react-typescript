@@ -2,7 +2,9 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
+   margin-top: 80px;
 }
+
 
 .home-container {
   width: 100vw;

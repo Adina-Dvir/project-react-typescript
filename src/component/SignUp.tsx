@@ -1,9 +1,11 @@
+// ייבוא React ו־useState לניהול סטייט מקומי
 import { useState } from "react";
 import type { FormEvent } from "react";
 
+// ייבוא קובץ עיצוב לדף ההרשמה
 import "../css/loginCss.css";
 
-// טיפוס לפרטי המשתמש שמעבירים לאבא
+// טיפוס לפרופס שמצפה לפונקציה שמופעלת אחרי הרשמה מוצלחת
 interface SignUpProps {
   onSignupSuccess: (user: {
     userName: string;
@@ -11,13 +13,16 @@ interface SignUpProps {
   }) => void;
 }
 
+// קומפוננטת SignUp שמקבלת prop של onSignupSuccess
 const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
+  // סטייטים לטופס – שם, אימייל וסיסמה
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  // בעת שליחת הטופס – בקשת POST לשרת
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // מניעת רענון ברירת מחדל
     console.log("📤 נשלח טופס הרשמה");
 
     try {
@@ -26,6 +31,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        // שליחת הנתונים לגוף הבקשה
         body: JSON.stringify({
           UserName: name,
           UserEmail: email,
@@ -33,22 +39,22 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
         }),
       });
 
-      const text = await response.text();
+      const text = await response.text(); // קריאת טקסט מהתגובה
 
       try {
-        const data = JSON.parse(text);
+        const data = JSON.parse(text); // ניסיון לפענח את המידע
 
         if (response.ok) {
           alert("נרשמת והתחברת בהצלחה!");
 
-          // שמירת נתונים ב־localStorage
+          // שמירת הנתונים בלוקאל סטורג'
           localStorage.setItem("token", data.user.token);
           localStorage.setItem("userName", data.user.userName);
           if (data.user.profileImage) {
             localStorage.setItem("profileImage", data.user.profileImage);
           }
 
-          // עדכון אבא
+          // קריאה לפונקציה מההורה עם פרטי המשתמש
           onSignupSuccess({
             userName: data.user.userName,
             profileImage: data.user.profileImage || null,
@@ -67,9 +73,11 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
 
   return (
     <div className="login-container">
+      {/* טופס ההרשמה */}
       <form onSubmit={handleSubmit} className="login-form">
         <h2>הרשמה</h2>
 
+        {/* שדה שם */}
         <label>שם:</label>
         <input
           type="text"
@@ -78,6 +86,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
           required
         />
 
+        {/* שדה אימייל */}
         <label>אימייל:</label>
         <input
           type="email"
@@ -86,6 +95,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
           required
         />
 
+        {/* שדה סיסמה */}
         <label>סיסמה:</label>
         <input
           type="password"
@@ -94,6 +104,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignupSuccess }) => {
           required
         />
 
+        {/* כפתור שליחה */}
         <button type="submit">הרשמה</button>
       </form>
     </div>

@@ -8,7 +8,8 @@ import {
     getProfessionalById,
     addProfessional,
     deleteProfessional,
-    updateProfessional
+    updateProfessional,
+    getProfessionalByCategory
 } from '../../services/professionalApi';
 
 // מצב התחלתי של הסטייט
@@ -33,15 +34,44 @@ export const fetchProfessionalById = createAsyncThunk<Professional,number>('prof
 });
 
 // יצירת עסק חדש
-export const createProfessional = createAsyncThunk<Professional,Partial<Omit<Professional,'professionalId'>>>('professionals/createProfessional', async (professionalData) => {
-    return await addProfessional(professionalData);
-});
+export const createProfessional = createAsyncThunk<Professional, Partial<Omit<Professional, "professionalId">>>(
+  'professionals/createProfessional',
+  async (professionalData) => {
+    const formData = new FormData();
+    
+    // נוסיף את הנתונים לפורמט של FormData
+for (const key in professionalData) {
+  if (
+    Object.prototype.hasOwnProperty.call(professionalData, key) &&
+    (professionalData as any)[key] !== undefined
+  ) {
+    formData.append(key, (professionalData as any)[key]);
+  }
+}
+
+
+    // קריאה ל-API ושמירה של העסק
+    const response = await addProfessional(formData);
+    return response;  // כאן אנחנו מחזירים את ה-professional שנוצר
+  }
+);
+
+
+
 
 // מחיקת עסק לפי מזהה
 export const removeProfessional = createAsyncThunk('professionals/removeProfessional', async (id:number) => {
     await deleteProfessional(id);
     return id; // מחזיר את ה-id כדי שנוכל להסיר אותו מהסטייט
 });
+// פעולה לשליפת עסקים לפי קטגוריה
+export const fetchProfessionalsByCategory = createAsyncThunk<Professional[], number>(
+  'professionals/fetchProfessionalsByCategory',
+  async (categoryId: number) => {
+    const response = await getProfessionalByCategory(categoryId.toString()); // קריאה ל-API לשליפת העסקים
+    return response;
+  }
+);
 
 // עדכון עסק לפי מזהה
 export const updateProfessionalById = createAsyncThunk<Professional, { id: number; professionalData: Partial<Omit< Professional,'professionalId'>> }>('professionals/updateProfessionalById', async ({ id, professionalData }) => {
@@ -81,7 +111,18 @@ const professionalSlice = createSlice({
                 if (index !== -1) {
                     state.professionals[index] = action.payload; // מחליפים את הקיים בחדש
                 }
-            });
+            })
+            .addCase(fetchProfessionalsByCategory.pending, (state: ProfessionalState) => {
+    state.loading = true;
+})
+.addCase(fetchProfessionalsByCategory.fulfilled, (state: ProfessionalState, action) => {
+    state.professionals = action.payload;
+    state.loading = false;
+})
+.addCase(fetchProfessionalsByCategory.rejected, (state: ProfessionalState, action) => {
+    state.error = action.error.message ?? '';
+    state.loading = false;
+});
     }
 });
 

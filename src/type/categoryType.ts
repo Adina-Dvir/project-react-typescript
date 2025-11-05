@@ -8,7 +8,7 @@ export interface Category {
 }
 
 export interface CategoryState {
-  categories: Category[];
-  loading: boolean;
-  error: string | null;
+  categories: Category[]; // מערך של קטגוריות
+  loading: boolean; // האם הטעינה מתבצעת
+  error: string; // הודעת שגיאה במקרה של תקלה
 }

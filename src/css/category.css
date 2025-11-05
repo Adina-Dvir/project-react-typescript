@@ -1,5 +1,7 @@
 /* css/Categories.css */
-
+body {
+  margin-top: 80px; /* לפחות יותר מגובה ה-header */
+}
 /* הקופסה הראשית שמכילה את כל הקטגוריות */
 .categories-wrapper {
   display: flex;               /* סידור פריטים בשורה */

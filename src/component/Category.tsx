@@ -1,36 +1,37 @@
-// components/Categories.js
-import  { useEffect, useState } from "react";
-import { getCategory } from "../services/categoryApi"; // שירות שמביא את הקטגוריות מהשרת
-import '../css/category.css'; // קובץ עיצוב ייעודי
-import type {Category} from '../type/categoryType.js'
+// components/Categories.tsx
+
+import { useEffect, useState } from "react"; // שימוש ב-hooks לניהול מצב וטעינה
+import { getCategory } from "../services/categoryApi"; // פונקציה שמביאה קטגוריות מהשרת
+import '../css/category.css'; // קובץ CSS מותאם לקומפוננטה
+import type { Category } from '../type/categoryType.js'; // טיפוס נתונים של קטגוריה
+import { Link, useNavigate } from 'react-router-dom'; // ניווט בין דפים
 
 export default function Categories() {
-  // יצירת state לאחסון הקטגוריות שהתקבלו מהשרת
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]); // רשימת קטגוריות
+  const [error, setError] = useState<string | null>(null); // משתנה לשמירת שגיאה אם קיימת
+  const navigate = useNavigate(); // שימוש בפונקציית ניווט מ־React Router
 
-  // state עבור שגיאה אפשרית אם הבקשה לשרת נכשלת
-  const [error, setError] = useState<string|null>(null);
-
-  // useEffect פועל ברגע שהקומפוננטה נטענת בפעם הראשונה
+  // useEffect פועל פעם אחת בעת טעינת הקומפוננטה – שולף את הקטגוריות
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // קריאה לשרת דרך פונקציית השירות
-        const data = await getCategory();
-
-        // שמירת התוצאה ב-state
-        setCategories(data);
+        const data = await getCategory(); // קריאה ל־API
+        setCategories(data); // שמירת הקטגוריות ב־state
       } catch (err) {
-        // טיפול בשגיאה - נציג הודעה מתאימה במסך
         console.error("שגיאה בטעינת הקטגוריות:", err);
-        setError("אירעה שגיאה בטעינת הקטגוריות.");
+        setError("אירעה שגיאה בטעינת הקטגוריות."); // אם יש שגיאה – עדכון ה־state
       }
     };
 
-    fetchData();
+    fetchData(); // הפעלת הקריאה
   }, []);
 
-  // הצגת הודעת שגיאה אם הייתה
+  // פונקציה שמנווטת לעמוד הוספת עסק
+  const handleAddProfessionalClick = () => {
+    navigate('/addProfessional');
+  };
+
+  // הצגת הודעת שגיאה אם יש כזו
   if (error) return <div className="categories-error">{error}</div>;
 
   return (
@@ -38,24 +39,26 @@ export default function Categories() {
       {categories.map((category) => (
         <div key={category.categoryId} className="category-card">
           <div className="category-header">
-            {/* לוגו של האתר או סמל */}
             <img
-              src="/images/logo-circle.png" // שימי את הקובץ הזה בתיקיית public/images
+              src="/images/logo-circle.png" // תמונת לוגו מהתיקייה public/images
               alt="My Bcard"
               className="category-logo"
             />
           </div>
 
-          {/* שם הקטגוריה */}
-          <h3 className="category-title">{category.categoryName}</h3>
+          <h3 className="category-title">{category.categoryName}</h3> {/* כותרת */}
+          <p className="category-description">{category.categoryDescription}</p> {/* תיאור */}
 
-          {/* תיאור קצר */}
-          <p className="category-description">{category.categoryDescription}</p>
-
-          {/* כפתורים */}
           <div className="category-buttons">
-            <button className="view-btn">View Category</button>
-            <button className="add-btn">Add a Professional</button>
+            {/* קישור לעמוד הקטגוריה */}
+            <Link to={`/categories/${category.categoryId}`} className="view-btn">
+              View Category
+            </Link>
+
+            {/* כפתור שמנווט לעמוד הוספת עסק */}
+            <button className="add-btn" onClick={handleAddProfessionalClick}>
+              Add a Professional
+            </button>
           </div>
         </div>
       ))}

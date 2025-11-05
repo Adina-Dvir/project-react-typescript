@@ -1,4 +1,14 @@
 /* addProfessional.css */
+body {
+  margin-top: 80px; /* לפחות יותר מגובה ה-header */
+}
+.form-container {
+  /* margin-top: 40px;  */
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
 
 .add-form {
   max-width: 600px;

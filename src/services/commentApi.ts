@@ -31,7 +31,7 @@ export const getCommentById = async (id: number): Promise<Comment> => {
 export const addComment = async (commentData: Partial<Omit<Comment, 'commentId'>>): Promise<Comment> => {
   try {
     const response = await axios.post<Comment>(
-      'https://localhost:7111/api/commentController/addComment',
+      'https://localhost:7111/api/Comment',
       commentData
     );
     return response.data;

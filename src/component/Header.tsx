@@ -19,7 +19,7 @@ export default function Header({ user, onLogout, onLoginClick, onSignupClick }: 
         <>
           {/* 🔗 קישורים נוספים למשתמש מחובר */}
           <nav className="nav-links">
-            <Link to="/HomePage">HOME PAGE</Link>
+            <Link to="/">HOME PAGE</Link>
             <Link to="/Category">CATEGORIES</Link>
             <Link to="/professionals">ALL PROFESSIONALS</Link>
             <Link to="/comments">COMMENTS SITE</Link>

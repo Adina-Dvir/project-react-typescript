@@ -1,25 +1,22 @@
-export interface Professional {
+export type Professional = {
   professionalId: number;
-  professionalName: string;
-  professionalAdress: string;
-  professionalDescription: string;
-  priceRange?: string;           // סימן ? = אופציונלי (יכול להיות undefined)
-  professionalPhone: string;
-  professionalEmail: string;
-  subject: string;
-  years?: number;                // אופציונלי (יכול להיות undefined)
-  professionalPassword: string;
-  uploadDate: string | Date;     // TypeScript לא מבין Date בברירת מחדל, אפשר גם מחרוזת
-  imageUrls: string;
-  professionalPlace: string;
-  profile: string;
-  city: string;
-  //arrImage?: string;             // אופציונלי (יכול להיות undefined)
-  fileImage?: File;              // אופציונלי (יכול להיות undefined)
-  categoryId: number;
-  images: ProfessionalImage[];
+  professionalName?: string;
+  professionalAdress?: string;
+  professionalDescription?: string;
+  priceRange?: string;
+  professionalPhone?: string;
+  professionalEmail?: string;
+  subject?: string;
+  years?: number;
+  professionalPassword?: string;
+  uploadDate?: string;
+  professionalPlace?: string;
+  profile?: string;
+  city?: string;
+  categoryId?: number;
+  images?: ProfessionalImage[];
+};
 
-}
 export interface ProfessionalState {
   professionals: Professional[];
   loading: boolean;
@@ -28,23 +25,25 @@ export interface ProfessionalState {
 // src/type/AddProfessionalForm.ts
 
 export interface AddProfessionalForm {
-  professionalName: string;
-  professionalPhone: string;
-  professionalEmail?: string;
-  professionalAdress?: string;
-  subject?: string;
-  professionalDescription?: string;
-  professionalPlace?: string;
-  priceRange?: string;
-  professionalPassword?: string;
-  categoryId?: number;
-  uploadDate?: string | Date;
-  imageUrls?: string;
-  fileImage: File; // חובה אם את דורשת תמונה
-  images: ProfessionalImage[]; // לא arrImage
+  ProfessionalName: string;
+  ProfessionalPhone: string;
+  ProfessionalEmail?: string;
+  ProfessionalAdress?: string;
+  ProfessionalPassword:string;
+  City?: string;
+  ProfessionalDescription?: string;
+  ProfessionalPlace?: string;
+  PriceRange?: string;
+  CategoryId?: number;
+  //uploadDate?: string | Date;
+  //imageUrls?: string;
+  //fileImage: File; // חובה אם את דורשת תמונה
+  fileImages: File[]; // לא arrImage
 
 }
-export interface ProfessionalImage {
-    fileName: string;
-  ImageData: string;
-}
+export type ProfessionalImage = {
+  imageId: number;
+  fileName: string;
+  imageBase64: string; // מחרוזת שמכילה את ה-URL של התמונה – תיווצר מהשרת
+  professionalId: number;
+};

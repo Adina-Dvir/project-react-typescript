@@ -39,7 +39,7 @@ export const getCategoryById = async (id: number): Promise<Category> => {
 export const addCategory = async (categoryData: Omit<Category, 'categoryId'>): Promise<Category> => {
   try {
     console.log(categoryData);
-    const response = await axios.post<Category>('http://localhost:7111/api/Category', categoryData);
+const response = await axios.post<Category>('https://localhost:7111/api/Category', categoryData);
     console.log(response.data);
     return response.data;
   } catch (error) {

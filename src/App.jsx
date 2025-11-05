@@ -10,6 +10,7 @@ import AddProfessional from './component/AddProfessional';
 import Professionals from './component/Professionals';
 import ProfessionalPage from "./component/ProfessionalPage";
 import CommentsSite from './component/CommentSite';
+import CategoryProfessionals from './component/CategoryProfessionals';
 
 // function App() {
 //   return <h1>שלום עולם!</h1>
@@ -68,6 +69,8 @@ function App() {
   <Route path="/AddProfessional" element={user ? <AddProfessional /> : <Navigate to="/" replace />} />
   <Route path="/Category" element={user ? <Category /> : <Navigate to="/" replace />} />
   <Route path="/comments" element={user ? <CommentsSite /> : <Navigate to="/" replace />} />
+  <Route path="/comments" element={user ? <CommentsSite /> : <Navigate to="/" replace />} />
+<Route path="/categories/:categoryId" element={user ? <CategoryProfessionals /> : <Navigate to="/" replace />} />
 
   <Route path="/professionals" element={user ? <Professionals /> : <Navigate to="/" replace />} />
   <Route path="/professional/:id" element={user ?<ProfessionalPage />: <Navigate to="/" replace/> } />

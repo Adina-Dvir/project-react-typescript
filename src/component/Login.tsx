@@ -1,26 +1,33 @@
 // src/components/Login.tsx
+
+// שימוש ב־useState לניהול שדות הטופס
 import { useState } from "react";
 import type { FormEvent } from "react";
 
+// קובץ CSS לעיצוב הטופס
 import "../css/loginCss.css";
-import type { User } from "../type/userType"; 
-// פרופס לקומפוננטת Login
+
+// טיפוס עבור הפרופס שמתקבל מהורה – פונקציה שמתבצעת לאחר התחברות מוצלחת
 interface LoginProps {
   onLoginSuccess: (user: {
     userName: string;
-    UserMail: string;
+    userEmail: string;
     token: string;
   }) => void;
 }
 
+// קומפוננטת התחברות
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  // סטייטים עבור שדות טופס ההתחברות
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  // טיפול בשליחת טופס ההתחברות
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // מונע רענון עמוד
+    e.preventDefault(); // ביטול רענון ברירת מחדל של הדפדפן
 
     try {
+      // קריאה לשרת עם פרטי ההתחברות
       const response = await fetch("https://localhost:7111/api/Login/login", {
         method: "POST",
         headers: {
@@ -32,36 +39,32 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         }),
       });
 
-      const text = await response.text(); // מקבלים תגובה כטקסט
+      const text = await response.text(); // קבלת הטקסט המקורי מהשרת
 
       try {
-        const data = JSON.parse(text); // מנסים לפרסר JSON
+        const data = JSON.parse(text); // ניסיון לפענח JSON
 
         if (response.ok) {
-          // אם התחברות הצליחה
-          console.log("response text:", text);
-          console.log("parsed username:", data.user.userName);
-
-          // שומרים את הטוקן בלוקאל סטורג'
+          // התחברות הצליחה – שמירת המידע המקומית
           localStorage.setItem("token", data.token);
-
-          // שומרים את שם המשתמש ודוא"ל בלוקאל סטורג'
           localStorage.setItem("userName", data.user.userName);
-          localStorage.setItem("userMail", data.user.UserEmail);
+          localStorage.setItem("userEmail", data.user.userEmail);
 
-          // יוצרים אובייקט משתמש להעברה לאבא
           const user = {
             userName: data.user.userName,
-            UserMail: data.user.UserEmail,
+            userEmail: data.user.userEmail,
             token: data.token,
           };
 
-          onLoginSuccess(user); // מעדכנים את האבא (App / HomePage)
+          // קריאה לפונקציה מהורה לציון שההתחברות הצליחה
+          onLoginSuccess(user);
           alert("התחברת בהצלחה!");
         } else {
+          // הודעת שגיאה מהשרת
           alert(data.message || "שגיאה בהתחברות");
         }
       } catch (parseError) {
+        // לא הצליח לפענח JSON
         alert("שגיאה בפענוח התגובה מהשרת:\n" + text);
       }
     } catch (error) {
@@ -74,6 +77,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <form onSubmit={handleSubmit} className="login-form">
         <h2>התחברות</h2>
 
+        {/* שדה אימייל */}
         <label>אימייל:</label>
         <input
           type="email"
@@ -82,6 +86,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           required
         />
 
+        {/* שדה סיסמה */}
         <label>סיסמה:</label>
         <input
           type="password"
@@ -90,6 +95,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           required
         />
 
+        {/* כפתור שליחה */}
         <button type="submit">התחבר</button>
       </form>
     </div>
@@ -97,94 +103,3 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 };
 
 export default Login;
-
-// import React, { useState } from "react";
-// import "../css/loginCss.css";
-
-// const Login = ({ onLoginSuccess }) => {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault(); // מונע רענון עמוד
-
-//     try {
-//       const response = await fetch("https://localhost:7111/api/Login/login", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           UserMail: email,
-//           Password: password,
-//         }),
-//       });
-
-//       const text = await response.text(); // מקבלים תגובה כטקסט
-
-//       try {
-//         const data = JSON.parse(text); // מנסים לפרסר JSON
-
-//         if (response.ok) {
-//           // אם התחברות הצליחה
-//             console.log("response text:", text);
-//             console.log("parsed username11111111:", data.user.userName);
-
-//           // שומרים את הטוקן בלוקאל סטורג'
-//           localStorage.setItem("token", data.token);
-
-//           // שומרים את שם המשתמש בלוקאל סטורג'
-//           localStorage.setItem("userName", data.user.userName);
-//           localStorage.setItem("userMail", data.user.UserEmail);
-
-//           // יוצרים אובייקט משתמש מלא
-//           const user = {
-//             userName: data.user.userName,
-//             UserMail:data.user.UserEmail,
-//             token: data.token,
-//           };
-
-//           // מעדכנים את האבא (App למשל)
-//           onLoginSuccess(user);
-//           console.log("userName from login response", data.user.userName);
-
-//           alert("התחברת בהצלחה!");
-//         } else {
-//           alert(data.message || "שגיאה בהתחברות");
-//         }
-//       } catch (parseError) {
-//         alert("שגיאה בפענוח התגובה מהשרת:\n" + text);
-//       }
-//     } catch (error) {
-//       alert("שגיאה בשרת או ברשת");
-//     }
-//   };
-
-//   return (
-//     <div className="login-container">
-//       <form onSubmit={handleSubmit} className="login-form">
-//         <h2>התחברות</h2>
-
-//         <label>אימייל:</label>
-//         <input
-//           type="email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-
-//         <label>סיסמה:</label>
-//         <input
-//           type="password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           required
-//         />
-
-//         <button type="submit">התחבר</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;

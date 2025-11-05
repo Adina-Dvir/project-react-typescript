@@ -1,42 +1,110 @@
+/* עיצוב כללי */
+body {
+  margin-top: 80px; /* לפחות יותר מגובה ה-header */
+}
 .comments-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 700px;
+  margin: 2rem auto;
   padding: 2rem;
+  background: linear-gradient(to right, #ffffff, #f9f9ff);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comments-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* טופס */
+.comments-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: right;
+}
+
+.comments-form h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1c0f42;
   text-align: center;
 }
 
 .comments-form textarea {
   width: 100%;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #ccc;
   resize: vertical;
-  background-color: #f0f0f0;
-  box-shadow: 0 4px 8px #1c0f42;
+  background-color: #f7f7f7;
   font-size: 1.1rem;
   direction: rtl;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.comments-form textarea:focus {
+  outline: none;
+  border-color: #7a6ff0;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(122, 111, 240, 0.2);
 }
 
 .comments-form button {
-  background-color: #1c0f42;
+  background: linear-gradient(to right, #5c4ecf, #392f78);
   color: white;
   border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
   font-size: 1rem;
-  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-weight: bold;
 }
 
+.comments-form button:hover {
+  background: linear-gradient(to right, #6f5eff, #453b9d);
+  transform: translateY(-2px);
+}
+
+/* דירוג - אינטראקטיבי */
+.rating-input {
+  font-size: 2.5rem;
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 1rem;
+  direction: ltr;
+}
+
+.rating-input .star {
+  display: inline-block;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.rating-input .star:hover {
+  transform: scale(1.2);
+}
+
+.rating-input .star.filled {
+  color: gold;
+}
+
+/* תגובה בודדת */
 .comment-card {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  background-color: #f8f8fc;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 8px #1c0f42;
+  margin-top: 1.5rem;
   text-align: right;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.comment-card:hover {
+  transform: translateY(-3px);
 }
 
 .comment-header {
@@ -46,35 +114,103 @@
 }
 
 .avatar {
-  background-color: #b0b0b0;
+  background-color: #7a6ff0;
   color: white;
   width: 50px;
   height: 50px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 1rem;
-}
-
-.rating-stars {
-  font-size: 1.5rem;
-  color: gold;
-  margin-bottom: 0.5rem;
+  box-shadow: 0 0 8px rgba(122, 111, 240, 0.3);
 }
 
 .comment-meta {
   font-weight: bold;
+  font-size: 1.1rem;
+  color: #1c0f42;
 }
 
 .comment-text {
   margin-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
 }
 
 .comment-date {
   font-size: 0.8rem;
-  color: #777;
+  color: #999;
   margin-top: 0.5rem;
+  text-align: left;
+}
+
+.rating-stars {
+  font-size: 1.4rem;
+  color: gold;
+  margin-bottom: 0.5rem;
+}
+/* דירוג אינטראקטיבי – מודרני יותר */
+.rating-stars-interactive {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  font-size: 2rem;
+  gap: 10px;
+}
+
+.rating-stars-interactive .star {
+  color: #ccc;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.3s;
+}
+
+.rating-stars-interactive .star:hover,
+.rating-stars-interactive .star.filled {
+  color: gold;
+  transform: scale(1.2);
+}
+
+/* תגובה על כל הרוחב */
+.comment-card {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 15px;
+  padding: 1.8rem;
+  margin: 1.2rem 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.comment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* כדי לוודא שכל הקונטיינר ברוחב מקסימלי */
+.comments-container {
+  max-width: 1000px;
+  width: 90%;
+  margin: 2rem auto;
+}
+.comments-form button {
+  background-color: #1c0f42;
+  color: white;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.comments-form button:hover {
+  background-color: #2f226a;
+  transform: scale(1.03);
 }

@@ -1,7 +1,9 @@
 import axios from 'axios';
-import type { Professional, ProfessionalState } from '../type/professionalType';
+import type { Professional } from '../type/professionalType';
+import type { EmailDetails } from '../type/emailType'; // תוודאי שהטיפוס קיים
 
 const baseUrl = 'https://localhost:7111/api/Professional';
+
 // ➕ מוסיף קליק לעסק לפי מזהה
 export const addClickForProfessional = async (professionalId: number): Promise<void> => {
   try {
@@ -16,6 +18,20 @@ export const addClickForProfessional = async (professionalId: number): Promise<v
     );
   } catch (error) {
     console.error("Error adding click:", error);
+    throw error;
+  }
+};
+
+// 📤 שליחת מייל לעסק
+export const sendEmailToProfessional = async (emailDetails: EmailDetails): Promise<void> => {
+  try {
+    await axios.post('https://localhost:7111/api/Professional/send-email', emailDetails, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error("Error sending email:", error);
     throw error;
   }
 };
@@ -55,18 +71,25 @@ export const getTrendingProfessionals = async (): Promise<Professional[]> => {
   }
 };
 
-
-// ➕ מוסיף איש מקצוע חדש (ללא professionalId)
-export const addProfessional = async (formData: FormData): Promise<void> => {
+// ➕ מוסיף עסק
+export const addProfessional = async (professionalData: FormData): Promise<Professional> => {
   const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error("אין טוקן - המשתמש לא מחובר");
+  }
+
   console.log("טוקן שנשלח:", token);
 
-  await axios.post(baseUrl, formData, {
+  const response = await axios.post('https://localhost:7111/api/Professional', professionalData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json" // ✅ נדרש כדי לוודא תגובה נכונה
+    },
+    withCredentials: false
   });
+
+  return response.data;
 };
 
 // ✏️ מעדכן איש מקצוע קיים
@@ -94,6 +117,11 @@ export const deleteProfessional = async (id: number): Promise<void> => {
     console.error(`Error deleting professional with id ${id}:`, error);
     throw error;
   }
-  
 };
 
+// 🧠 לפי קטגוריה
+export async function getProfessionalByCategory(categoryId: string) {
+  const res = await fetch(`/api/profrssional/byCategory/${categoryId}`);
+  if (!res.ok) throw new Error("Failed to fetch professional by category");
+  return res.json();
+}
